@@ -1,14 +1,15 @@
 .names {
-    color: red;
-    font-weight: bold;
-}
+  color: red;
+  font-weight: bold; }
+
 .intro {
-  background-color: MediumSeaGreen;
-}
-td{
-font-family:Georgia, Garamond, Serif;
-color:blue;
-font-style:italic;
-font-weight: bold;
-font-size: 30px;
-}
+  background-color: MediumSeaGreen; }
+
+td {
+  font-family: Georgia, Garamond, Serif;
+  color: blue;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 28px; }
+
+/*# sourceMappingURL=1.css.map */

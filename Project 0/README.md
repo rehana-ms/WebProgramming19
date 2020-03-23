@@ -1,1 +1,1 @@
-Project built using html and css
+A website for MSIT facult is built using html,css and bootstrap.
