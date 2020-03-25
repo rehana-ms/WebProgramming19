@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session
+from flask import Flask, session,render_template, request,redirect,url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -24,3 +24,14 @@ Session(app)
 @app.route("/")
 def index():
     return "Project 1: TODO"
+
+
+@app.route("/register",methods = ['POST','GET'])
+def register():
+    if request.method == 'POST':
+       name = request.form['uname']
+       print(name)
+       password = request.form['password']
+       print(password)
+       return redirect(url_for('register',name = name))
+    return render_template('registration.html')
