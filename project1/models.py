@@ -26,3 +26,6 @@ class Book(BASE):
         self.name = name
         self.author = author
         self.year = year
+
+    def __repr__(self):
+        return '<Book %r>' % (self.name)

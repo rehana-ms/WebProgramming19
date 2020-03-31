@@ -80,7 +80,7 @@ def login():
         if 'user' in session:
             user = session['user']
             #print("user:",user)
-            return render_template("user.html", user=user)
+            return render_template("search.html", user=user)
     else:
         #print("hererer")
         flash('Invalid username or password')
@@ -90,3 +90,8 @@ def login():
 def logout():
     session['user'] = None
     return redirect(url_for("register"))
+
+@APP.route('/search',methods=["POST"])
+def search():
+	print("searching")
+    

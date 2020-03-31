@@ -1,0 +1,53 @@
+
+<html>
+  <head>
+    <title>Search Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script> 
+</head>
+<body>
+	<h1>
+		Welcome to Search 
+	</h1>	 
+	<form action="/search" method = "POST">
+	<div class="container">
+		<div class="row"> 
+            <div class="col-sm-4"> 
+			 <div class="form-group">
+		  		<label for="isbn">ISBN</label><br>
+		  		<input type="text" class="form-control" name="isbn" value="" size="10"><br>
+		  	 </div>
+		  </div>
+		</div>
+		<div class="row"> 
+            <div class="col-sm-4"> 
+			 <div class="form-group">
+		  		<label for="title">Title</label><br>
+		  		<input type="text" class="form-control" name="title" value="" size="10"><br>
+		  	 </div>
+		  </div>
+		</div>
+		<div class="row"> 
+            <div class="col-sm-4"> 
+			 <div class="form-group">
+		  		<label for="author">Author</label><br>
+		  		<input type="text" class="form-control" name="author" value="" size="10"><br>
+		  	 </div>
+		  </div>
+		</div>
+		<div class="row"> 
+            <div class="col-sm-4"> 
+			 <div class="form-group">
+		  		<label for="year">Publication year</label><br>
+		  		<input type="text" class="form-control" name="year" value="" size="10"><br>
+		  		<input type="submit" value="Search"><br><br>
+
+		  	 </div>
+		  </div>
+		</div>
+	</div>
+
+  </body> 
+</html>
