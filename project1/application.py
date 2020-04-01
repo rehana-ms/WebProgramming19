@@ -8,7 +8,8 @@ from werkzeug.security import generate_password_hash
 from flask_session import Session
 from sqlalchemy.ext.declarative import declarative_base
 
-from models import User
+from models import User, Book
+from book_details import get_book
 
 BASE = declarative_base()
 APP = Flask(__name__)
@@ -110,3 +111,24 @@ def search():
             return render_template("book.html", message="no such book is found")
     else:
         return render_template("book.html", books = books)
+
+@APP.route('/bookdetails',methods=["GET", "POST"])
+def bookdetails():
+    print("searching")
+    data = request.form
+    isbn = data.get("isbn")
+
+    if request.method == 'POST':
+        print("isbn:",isbn)
+        try:
+            books = get_book(DB_SESSION, isbn)
+            errormessage = ''
+            if books is None:
+                errormessage = 'Query issue.'
+            if(len(books) == 0):
+                errormessage = 'No records found.'
+            return render_template("bookdetails.html", books = books, errormessage = errormessage)
+        except Exception as error:
+            return render_template("bookdetails.html", errormessage = 'No books found.')
+    else:
+        return render_template("bookdetails.html")
