@@ -12,11 +12,14 @@
         <td>ISBN</td>
         <td>Title</td>
         <td>Author</td>
+        <td>Year</td>
         {% for book in books %}
         <tr>
             <td>{{ book.isbn }}</td>
             <td>{{ book.title }}</td>
             <td>{{ book.author }}</td>
+            <td>{{ book.year }}</td>
+
         </tr>
         {% endfor %}
       </table>  
