@@ -18,14 +18,14 @@ class User(BASE):
 class Book(BASE):
     __tablename__ = 'books'
     isbn = Column(String(20), primary_key=True)
-    name = Column(String(40))
+    title = Column(String(40))
     author = Column(String(40))
     year = Column(Integer)
-    def __init__(self, isbn, name, author, year):
+    def __init__(self, isbn, title, author, year):
         self.isbn = isbn
-        self.name = name
+        self.title = title
         self.author = author
         self.year = year
-
+        
     def __repr__(self):
-        return '<Book %r>' % (self.name)
+        return "<Book(isbn='%s', title='%s', author='%s')>" % (self.isbn, self.title, self.author)

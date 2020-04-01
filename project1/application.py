@@ -1,6 +1,6 @@
 
 import os
-from sqlalchemy import create_engine,exists
+from sqlalchemy import create_engine,exists,or_
 from sqlalchemy.orm import scoped_session, sessionmaker
 from datetime import datetime
 from flask import flash, Flask, session, render_template, request, redirect, url_for
@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from flask_session import Session
 from sqlalchemy.ext.declarative import declarative_base
 
-from models import User
+from models import User,Book
 
 BASE = declarative_base()
 APP = Flask(__name__)
@@ -93,5 +93,18 @@ def logout():
 
 @APP.route('/search',methods=["POST"])
 def search():
-	print("searching")
-    
+    print("searching")
+    data = request.form
+    isbn = data.get("isbn")
+    title = data.get("title")
+    author = data.get("author")
+    year = data.get("year")
+    print("isbn:",isbn)
+    #result = DB_SESSION.query(Book).filter(_or(Book.isbn.like(f'%{isbn}'),(Book.title.like(f'%{title}'),(Book.author.like(f'%{author}'),(Book.year.like(f'%{year}'))
+    books = DB_SESSION.query(Book).filter(or_(Book.isbn==isbn),(Book.title==title),(Book.author==author),(Book.year==year))
+    print(books)	
+    if(len(books)==0):
+            return render_template("book.html", message="no such book is found")
+    else:
+        return render_template("book.html", books = books)
+
