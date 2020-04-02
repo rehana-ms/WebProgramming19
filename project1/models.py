@@ -28,4 +28,4 @@ class Book(BASE):
         self.year = year
         
     def __repr__(self):
-        return "<Book(isbn='%s', title='%s', author='%s')>" % (self.isbn, self.title, self.author)
+        return Book(self.isbn, self.title, self.author, self.year)

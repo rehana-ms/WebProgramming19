@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+ <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script>
+
+function searchBookData() {
+      var xhttp = new XMLHttpRequest();
+      // isbn
+      var isbn = document.getElementById("isbninput").value;
+      // console.log(isbn)
+      // alert(isbn)
+      xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+            
+            var search_container = document.getElementById("search_container");
+            var book_template = document.getElementById("book_template");
+            txt = "<div id=\"book_template\">"
+            for( let prop in response ){
+               console.log( response[prop].isbn );
+               txt += "<a id=\"book_anchor\" href=\"#\" onclick=loadBookData("+ response[prop].isbn +")>"
+               txt += "<div class=\"row\" id=\"bookrecord\">"+
+                     "<div class=\"col-sm-3\">" +
+                        "<h5 id=\"isbn\" >" +response[prop].isbn + "</h5>"+
+                     "</div>"+
+                     "<div class=\"col-sm-3\">" +
+                        "<h5 id=\"title\" >" +response[prop].title + "</h5>"+
+                     "</div>"+
+                     "<div class=\"col-sm-3\">" +
+                        "<h5 id=\"author\" >" +response[prop].author + "</h5>"+
+                     "</div>"+
+                     "<div class=\"col-sm-3\">" +
+                        "<h5 id=\"year\">" +response[prop].year + "</h5>"+
+                     "</div>"+
+                  "</div>"
+                  txt += "</a>"
+            }
+            txt += "</div>"
+            document.getElementById("book_template").innerHTML = txt   
+         }
+      };
+      xhttp.open("GET", "/api/search/"+ isbn, true);
+      xhttp.send();
+      }
+
+     function loadBookData(id) {
+      var xhttp = new XMLHttpRequest();
+      var isbn = id;
+      xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+            txt = "<div id=\"book_details\">" +
+            "<h5 id=\"isbn\" >"+ response.isbn +"</h5>" +
+            "<h5 id=\"title\" >"+ response.title +"</h5>" +
+            "<h5 id=\"author\" >"+ response.author +"</h5>" +
+            "<h5 id=\"year\" >"+ response.year +"</h5>"
+            txt += "</div>"
+            document.getElementById("book_details").innerHTML = txt 
+         }
+      };
+      xhttp.open("GET", "/api/book/"+ isbn, true);
+      xhttp.send();
+      }
+  </script> 
+  <body>
+   <div class="container">
+      <div class="row">
+        <!-- SEARCH -->
+         <div id="search_container" class="col-sm-8" style="background-color:yellow;">
+          
+            <h1>Welcome to search home</h1>
+            <div>
+                  <input type="text" class="form-control" id="isbninput" size="10"><br>
+                  <button type="submit" onclick="searchBookData()" value="Login">Search</button>
+            </div>
+            <div id="book_template">
+
+            </div>
+         </div>
+
+        <!-- BOOK -->
+        <div class="col-sm-4" style="background-color:pink;">
+         <h1>Book Details</h1>
+         <div id="book_details">
+            
+         </div>
+        </div>
+      </div>
+    </div>
+   </body>
+</html>
