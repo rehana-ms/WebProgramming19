@@ -46,12 +46,12 @@ DB_SESSION = DB()
 
 with open('books.csv') as csvfile:
      books = csv.reader(csvfile, delimiter=',')
-     for row in books:
-     	print(row[0]+","+row[1]+","+row[2]+","+row[3])
-     	break 
+     #for row in books:
+     #	print(row[0]+","+row[1]+","+row[2]+","+row[3])
+     #	break 
      for row in books: 
          print(row[0]+","+row[1]+","+row[2]+","+row[3])
          book = Book(isbn=row[0], title=row[1], author = row[2], year = int(row[3]))
          DB_SESSION.add(book)
-DB_SESSION.commit()
+         DB_SESSION.commit()
 DB_SESSION.close() 
