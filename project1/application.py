@@ -112,6 +112,30 @@ def search():
     else:
         return render_template("book.html", books = books)
 
+@APP.route('/api/book/<ISBN>',methods=["GET", "POST"])
+def apibookdetails(ISBN):
+    print("searching")
+    data = request.form
+    isbn = data.get("isbn")
+    if isbn is not None:
+        ISBN = isbn
+
+    if request.method == 'GET' or request.method == 'POST':
+        print("isbn:",ISBN)
+        try:
+            books = get_book(DB_SESSION, ISBN)
+            errormessage = ''
+            if books is None:
+                errormessage = 'Query issue.'
+            if(len(books) == 0):
+                errormessage = 'No records found.'
+            return render_template("bookdetails.html", books = books, errormessage = errormessage)
+        except Exception as error:
+            return render_template("bookdetails.html", errormessage = 'No books found.')
+    else:
+        return render_template("bookdetails.html")
+
+
 @APP.route('/bookdetails',methods=["GET", "POST"])
 def bookdetails():
     print("searching")
