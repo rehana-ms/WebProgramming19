@@ -1,6 +1,6 @@
 
 import os
-from sqlalchemy import create_engine,exists
+from sqlalchemy import create_engine,exists, or_
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import Column, Integer, String,DateTime,exists,Sequence
 from sqlalchemy.ext.declarative import declarative_base
@@ -141,28 +141,53 @@ def singlepage(ISBN):
         return render_template("bookdetails.html")
 
 
-@APP.route('/api/search/<ISBN>',methods=["GET", "POST"])
-def apisearchbook(ISBN):
+@APP.route('/api/search/<SEARCHREQ>',methods=["GET", "POST"])
+def apisearchbook(SEARCHREQ):
     print("searching")
-    data = request.form
-    isbn = data.get("isbn")
-    if isbn is not None:
-        ISBN = isbn
-
+    # data = request.form
+    # isbn = data.get("isbn")
+    # if isbn is not None:
+    #     ISBN = isbn
+    print(SEARCHREQ)
+    requestlst = SEARCHREQ.split('-')
+    ISBN = requestlst[0]
+    TITLE = requestlst[1]
+    AUTHOR = requestlst[2]
+    YEAR = requestlst[3]
+    if(len(YEAR) == 0):
+        YEAR = 0
+    else:
+        YEAR = int(YEAR)
+    if(len(ISBN) == 0):
+        ISBN = ''
+    if(len(TITLE) == 0):
+        TITLE = ''
+    if(len(AUTHOR) == 0):
+        AUTHOR = ''
+    print('YEAR', YEAR)
     if request.method == 'GET' or request.method == 'POST':
         print("SEARCH:",ISBN)
         try:
-            # books = get_search_book(DB_SESSION, ISBN)
-            # print(books, '11111111')
+            books = get_search_book(DB_SESSION, ISBN, TITLE, AUTHOR, YEAR, 1)
+            # if len(ISBN) > 0:
+            #     books = get_search_book(DB_SESSION, ISBN, 1)
+            # elif len(TITLE) > 0:
+            #     books = get_search_book(DB_SESSION, TITLE, 1)
+            # elif len(AUTHOR) > 0:
+            #     books = get_search_book(DB_SESSION, AUTHOR, 1)
+            # elif len(YEAR) > 0:
+            #     books = get_search_book(DB_SESSION, YEAR, 1)
+            print(len(books), '11111111')
             errormessage = ''
             # if books is None:
             #     errormessage = 'Query issue.'
             # if(len(books) == 0):
             #     errormessage = 'No records found.'
-            responsebooks = {'380795272': {'isbn': '380795272', 'title': 'Krondor: The Betrayal', 'author': 'Raymond E. Feist', 'year': 1998}, '1416949658': {'isbn': '1416949658', 'title': 'The Dark Is Rising', 'author': 'Susan Cooper', 'year': 1973}}
-            # for book in books:
-            #     eachbook = {'isbn':books[0].isbn, 'title':books[0].title, 'author':books[0].author, 'year':books[0].year}
-            #     responsebooks[eachbook[isbn]] = eachbook
+            responsebooks = {}
+            # responsebooks = {'380795272': {'isbn': '380795272', 'title': 'Krondor: The Betrayal', 'author': 'Raymond E. Feist', 'year': 1998}, '1416949658': {'isbn': '1416949658', 'title': 'The Dark Is Rising', 'author': 'Susan Cooper', 'year': 1973}}
+            for book in books:
+                eachbook = {'isbn':book.isbn, 'title':book.title, 'author':book.author, 'year':book.year}
+                responsebooks[eachbook['isbn']] = eachbook
             print(responsebooks, 'RAJESH')
             return jsonify(responsebooks)
             # return render_template("bookdetails.html", books = books, errormessage = errormessage)

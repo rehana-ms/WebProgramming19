@@ -12,6 +12,9 @@ function searchBookData() {
       var xhttp = new XMLHttpRequest();
       // isbn
       var isbn = document.getElementById("isbninput").value;
+      var title = document.getElementById("titleinput").value;
+      var author = document.getElementById("authorinput").value;
+      var year = document.getElementById("yearinput").value;
       // console.log(isbn)
       // alert(isbn)
       xhttp.onreadystatechange = function() {
@@ -45,7 +48,8 @@ function searchBookData() {
             document.getElementById("book_template").innerHTML = txt   
          }
       };
-      xhttp.open("GET", "/api/search/"+ isbn, true);
+      req = isbn + "-" + title + "-" + author + "-" + year
+      xhttp.open("GET", "/api/search/"+ req, true);
       xhttp.send();
       }
 
@@ -76,10 +80,21 @@ function searchBookData() {
          <div id="search_container" class="col-sm-8" style="background-color:yellow;">
           
             <h1>Welcome to search home</h1>
-            <div>
+            <div class="row">
+               <div class="col-sm-3">
                   <input type="text" class="form-control" id="isbninput" size="10"><br>
-                  <button type="submit" onclick="searchBookData()" value="Login">Search</button>
+               </div>
+               <div class="col-sm-3">
+                  <input type="text" class="form-control" id="titleinput" size="10"><br>
+               </div>
+               <div class="col-sm-3">
+                  <input type="text" class="form-control" id="authorinput" size="10"><br>
+               </div>
+               <div class="col-sm-3">
+                  <input type="text" class="form-control" id="yearinput" size="10"><br>
+               </div>
             </div>
+            <button type="submit" onclick="searchBookData()" value="Login">Search</button>
             <div id="book_template">
 
             </div>
