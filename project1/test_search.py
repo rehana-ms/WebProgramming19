@@ -1,7 +1,7 @@
 import os
 import unittest
-#from search import search
-
+from search import *
+from testing_all import get_db_Setup
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine, or_
 from models import *
@@ -9,67 +9,76 @@ from models import *
 class Test_search(unittest.TestCase):
 
     def setUp(self):
-        #app.config['TESTING'] = True
-        #app.config['WTF_CSRF_ENABLED'] = False
-        #app.config['DEBUG'] = False
-        # Check for environment variable
+
         print("Setup")
-    #    if not os.getenv("DATABASE_URL"):
-    #        raise RuntimeError("DATABASE_URL is not set")
-
         self.DB_SESSION = get_db_Setup()
-        # # Configure session to use filesystem
-        # APP.config["SESSION_PERMANENT"] = False
-        # APP.config["SESSION_TYPE"] = "filesystem"
-        # Session(APP)
-        #
-        # # Set up database
-        # print("Setup")
-        # ENGINE = create_engine(os.getenv("DATABASE_URL"))
-        # # BASE.metadata.create_all(ENGINE)
-        # DB = scoped_session(sessionmaker(bind=ENGINE))
-        # DB_SESSION = DB()
+
         pass
-
-    def searchbook_ISBN(self):
-        isbn = ""
-        title = "Krondor: The Betrayal"
-        author = "Raymond E. Fetist"
-        results=[]
-        results.add("380795272")
-        results.add(title)
-        results.add(author)
-        print(results)
-        books = DB_SESSION.query(Book).filter(or_(Book.isbn==isbn,Book.title==title,Book.author==author))
-        print(books)
-        self.assertEqual(results, books)
-
-    def searchbook_title(self):
-        isbn = "380795272"
-        title = ""
-        author = "Raymond E. Fetist"
-        results=[]
-        results.add(isbn)
-        results.add("Krondor: The Betrayal")
-        results.add(author)
-        print(results)
-        books = DB_SESSION.query(Book).filter(or_(Book.isbn==isbn,Book.title==title,Book.author==author))
-        print(books)
-        self.assertEqual(results, books)
-
-    def searchbook_author(self):
+    def test_searchbook(self):
         isbn = "380795272"
         title = "Krondor: The Betrayal"
-        author = ""
-        results=[]
-        results.add(isbn)
-        results.add(title)
-        results.add("Raymond E. Fetist")
-        print(results)
-        books = DB_SESSION.query(Book).filter(or_(Book.isbn==isbn,Book.title==title,Book.author==author))
-        print(books)
-        self.assertEqual(results, books)
+        author = "Raymond E. Feist"
+        year="1998"
+        books = searchbooks(self.DB_SESSION,isbn,title,author,year)
+        print(books[0])
+        flag=''
+        if books[0].isbn==isbn:
+           if books[0].title==title:
+              if books[0].author==author:
+                 if books[0].year==(int(year)):
+                    flag='True'
+        self.assertTrue(flag, 'True')
 
+    def test_searchbook_ISBN(self):
+        isbn = "380795272"
+        title = "Krondor: The Betrayal"
+        author = "Raymond E. Feist"
+        year="1998"
+        test=""
+
+        books = searchbooks(self.DB_SESSION,isbn,test,test,0)
+        print(books[0])
+        flag=''
+        if books[0].isbn==isbn:
+           if books[0].title==title:
+              if books[0].author==author:
+                 if books[0].year==(int(year)):
+                    flag='True'
+        self.assertTrue(flag, 'True')
+
+    def test_searchbook_title(self):
+        isbn = "380795272"
+        title = "Krondor: The Betrayal"
+        author = "Raymond E. Feist"
+        year="1998"
+        test=""
+
+        books = searchbooks(self.DB_SESSION,test,title,test,0)
+        print(books[0])
+        flag=''
+        if books[0].isbn==isbn:
+           if books[0].title==title:
+              if books[0].author==author:
+                 if books[0].year==(int(year)):
+                    flag='True'
+        self.assertTrue(flag, 'True')
+
+    def test_searchbook_author(self):
+        isbn = "380795272"
+        title = "Krondor: The Betrayal"
+        author = "Raymond E. Feist"
+        year="1998"
+        test=""
+
+        books = searchbooks(self.DB_SESSION,test,test,author,0)
+        print(books[0])
+        flag=''
+        if books[0].isbn==isbn:
+           if books[0].title==title:
+              if books[0].author==author:
+                 if books[0].year==(int(year)):
+                    flag='True'
+        self.assertTrue(flag, 'True')
     # executed after each test
     def tearDown(self):
         pass

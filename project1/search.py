@@ -7,10 +7,20 @@ from sqlalchemy import create_engine, or_
 #DB = scoped_session(sessionmaker(bind=engine))
 #DB_SESSION = DB()
 
-def searchbooks(isbn,title,author,year):
+def searchbooks(DB_SESSION,isbn,title,author,year):
     print("search file")
-   # books = DB_SESSION.query(Book).filter(Book.isbn.like('%{isbn}%')).all()
-   # books = DB_SESSION.query(Book).filter(or_(Book.isbn.like('%{isbn}%'),(Book.title.like('%{title}%'),(Book.author.like('%{author}%')))
-    books = DB_SESSION.query(Book).filter(or_(Book.isbn==isbn,Book.title==title,Book.author==author))
+    #isbn=isbn.lower()
+    #title=title.lower()
+    #author=author.lower()
+    # results=[]
+    # books = DB_SESSION.query(Book).filter(or_(Book.isbn.like(f'{isbn}%'), Book.isbn==isbn)).all()
+    # results.append(books)
+    # print("isbn match:",results)
+    # books = DB_SESSION.query(Book).filter(or_(Book.title.like(f'%{title}%'),Book.title==title)).all()
+    # results.append(books)
+    # print("title match:",results)
+    # books = DB_SESSION.query(Book).filter(or_(Book.author.like(f'%{author}%'),Book.author==author)).all()
+    # results.append(books)
 
+    books= DB_SESSION.query(Book).filter(or_(Book.isbn==isbn,Book.title==title,Book.author==author)).all()
     return books

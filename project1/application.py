@@ -3,7 +3,7 @@ import os
 from sqlalchemy import create_engine,exists,or_
 from sqlalchemy.orm import scoped_session, sessionmaker
 from datetime import datetime
-from flask import flash, Flask, session, render_template, request, redirect, url_for
+from flask import flash, Flask, session, render_template, request, redirect, url_for,jsonify
 from werkzeug.security import generate_password_hash
 from flask_session import Session
 from sqlalchemy.ext.declarative import declarative_base
@@ -108,9 +108,41 @@ def search():
    # books = DB_SESSION.query(Book).filter(or_(Book.isbn.like('%{isbn}%'),(Book.title.like('%{title}%'),(Book.author.like('%{author}%')))
     # books = DB_SESSION.query(Book).filter(or_(Book.isbn==isbn,Book.title==title,Book.author==author))
     length=0
+    print(books[0])
     for book in books:
         length=length+1
     if(length==0):
             return render_template("book.html", message="no such book is found")
     else:
     	return render_template("book.html", books = books)
+
+# def get_book(DB_SESSION, ISBN):
+#     try:
+#         books = DB_SESSION.query(Book).filter(Book.isbn==ISBN).all()
+#         #print("get:",books)
+#         return books
+#     except:
+#         return None
+
+@APP.route('/api/book/<isbn>')
+def api_isbn(isbn):
+    book=get_book(DB_SESSION,isbn)
+    print(book[0].title)
+    if book is None:
+        return jsonify(
+            {
+                "error_code": 404,
+                "error_message": "Not Found"
+            }
+        ), 404
+
+    elif book:
+         result = {
+            "title": book[0].title,
+            "author": book[0].author,
+            "year": int(book[0].year),
+            "isbn": book[0].isbn,
+            }
+         return jsonify(result),200
+    else:
+        return jsonify({"Server is unavailable due to some issue"}), 500
